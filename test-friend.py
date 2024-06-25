@@ -8,7 +8,7 @@ from datetime import datetime
 warnings.filterwarnings("ignore", message="Unverified HTTPS request is being made.*")
 
 # 用户代理字符串，模仿浏览器
-user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 
 # 检查链接是否可访问的函数
 def check_link_accessibility(item):
@@ -16,15 +16,15 @@ def check_link_accessibility(item):
     link = item['link']
     try:
         # 发送HEAD请求
-        response = requests.head(link, headers=headers, timeout=5)
-        if response.status_code == 200 or 301 or 302:
+        response = requests.head(link, headers=headers, timeout=10)
+        if response.status_code == 200:
             return [item, 1]  # 如果链接可访问，返回链接
     except requests.RequestException:
         pass  # 如果出现请求异常，不执行任何操作
     
     try:
         # 如果HEAD请求失败，尝试发送GET请求
-        response = requests.get(link, headers=headers, timeout=5)
+        response = requests.get(link, headers=headers, timeout=10)
         if response.status_code == 200:
             return [item, 1]  # 如果GET请求成功，返回链接
     except requests.RequestException:
