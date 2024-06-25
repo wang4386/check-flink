@@ -11,33 +11,27 @@ warnings.filterwarnings("ignore", message="Unverified HTTPS request is being mad
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
 
 # 检查链接是否可访问的函数
-# 定义代理地址
-proxies = {
-    'http': 'socks5://115.238.185.209:5577',
-    'https': 'socks5://115.238.185.209:5577'
-}
-
-# 修改check_link_accessibility函数，添加代理设置
 def check_link_accessibility(item):
     headers = {"User-Agent": user_agent}
     link = item['link']
     try:
-        # 发送HEAD请求，使用代理
-        response = requests.head(link, headers=headers, proxies=proxies, timeout=5, verify=False)
-        if response.status_code == 200:
+        # 发送HEAD请求
+        response = requests.head(link, headers=headers, timeout=5)
+        if response.status_code == 200 or 301 or 302:
             return [item, 1]  # 如果链接可访问，返回链接
     except requests.RequestException:
         pass  # 如果出现请求异常，不执行任何操作
     
     try:
-        # 如果HEAD请求失败，尝试发送GET请求，使用代理
-        response = requests.get(link, headers=headers, proxies=proxies, timeout=5, verify=False)
+        # 如果HEAD请求失败，尝试发送GET请求
+        response = requests.get(link, headers=headers, timeout=5)
         if response.status_code == 200:
             return [item, 1]  # 如果GET请求成功，返回链接
     except requests.RequestException:
         pass  # 如果出现请求异常，不执行任何操作
     
     return [item, -1]  # 如果所有请求都失败，返回-1
+
 # 从link.txt中读取链接和名称
 link_list = []
 with open('./link.txt', 'r', encoding='utf-8') as file:
