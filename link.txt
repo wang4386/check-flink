@@ -23,7 +23,6 @@ CORS-Anywhere,https://cors.qninq.cn/
 青柠聚合登录,https://u.qninq.cn
 青柠多合一,https://plan.qninq.cn
 StirlingPDF,https://pdf.qninq.cn
-AIDesign,https://ailogo.qq.com/guide/brandname
 今日热榜,https://hot.qninq.cn
 IT-Tools,https://it.qninq.cn/
 诺依阁的日记簿,https://blog.nuoyis.net
