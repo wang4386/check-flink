@@ -1,5 +1,5 @@
 {
-    "timestamp": "2024-06-26 16:42:59",
+    "timestamp": "2024-06-26 20:28:25",
     "accessible_links": [
         {
             "name": "猫不吃鱼",
@@ -128,9 +128,13 @@
         {
             "name": "喵呜壁纸",
             "link": "https://pic.oacg.cc/"
+        },
+        {
+            "name": "摸鱼的人",
+            "link": "https://moyude.ren"
         }
     ],
     "inaccessible_links": [],
-    "accessible_count": 32,
+    "accessible_count": 33,
     "inaccessible_count": 0
 }
