@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>友链检测</title>
+    <link rel="icon" href="https://qninq.cn/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://qninq.cn/api/bingimg/') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 30px 15px;
+            background: rgba(250, 250, 250, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(193, 193, 193, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        .description {
+            margin-bottom: 30px;
+            padding: 30px;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+        }
+        .card-list-title {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #000000;
+        }
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .github-badge {
+            display: inline-block;
+            border-radius: 5px;
+            text-shadow: none;
+            font-size: 12px;
+            color: #fff;
+            line-height: 15px;
+            background-color: #abbac3;
+            margin-bottom: 2px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .github-badge .badge-subject {
+            display: inline-flex;
+            align-items: center;
+            background-color: #4d4d4d;
+            padding: 3px 3px 3px 3px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            flex: 1;
+        }
+        .github-badge .badge-value {
+            display: inline-block;
+            padding: 3px 3px 3px 3px;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            flex: 1;
+        }
+        .github-badge .bg-red {
+            background-color: #F44336;
+        }
+        .github-badge .bg-green {
+            background-color: #3bca6e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="description">
+            <p>本页面用于自动检查和展示【倾城于你】站点友链的可访问性。</p>
+            <p>链接每隔一天自动更新一次。由于在GitHub Actions环境中运行，结果可能并不完全准确。对于被标记为不可访问的链接，我会进行手动检测。如果链接确实无法访问，我将尝试联系站长。如果一周内无法联系上，将会下架该友链。</p>
+            <p id="linkInfo"></p>
+        </div>
+        <h2 class="card-list-title">不可访问链接</h2>
+        <div id="inaccessibleLinks" class="card-list"></div>
+        <h2 class="card-list-title">可访问链接</h2>
+        <div id="accessibleLinks" class="card-list"></div>
+    </div>
+
+    <script>
+        // 假设result.json文件位于同一目录下
+        const jsonUrl = './result.json';
+
+        async function fetchJson(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error("Fetch error: ", error);
+            }
+        }
+
+        function displayLinks(links, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // 清空容器
+            links.forEach(link => {
+                const badge = document.createElement('div');
+                badge.className = 'github-badge';
+                badge.innerHTML = `
+                    <span class="badge-subject">${link.name}</span>
+                    <a href="${link.link}" target="_blank">
+                        <span class="badge-value ${link.status === 'accessible' ? 'bg-green' : 'bg-red'}">${link.status === 'accessible' ? '正常' : '异常'}</span>
+                    </a>
+                `;
+                container.appendChild(badge);
+            });
+        }
+
+        fetchJson(jsonUrl).then(data => {
+            document.getElementById('linkInfo').innerHTML = `
+                可访问链接数量：${data.accessible_count}，不可访问链接数量：${data.inaccessible_count}，更新时间：${data.timestamp}
+            `;
+            displayLinks(data.inaccessible_links, 'inaccessibleLinks');
+            displayLinks(data.accessible_links, 'accessibleLinks');
+        });
+    </script>
+</body>
+</html>
