@@ -118,7 +118,7 @@
                 badge.innerHTML = `
                     <span class="badge-subject">${link.name}</span>
                     <a href="${link.link}" target="_blank">
-                        <span class="badge-value ${link.status === 'accessible' ? 'bg-green' : 'bg-red'}">${link.status === 'accessible' ? '正常' : '异常'}</span>
+                        <span class="badge-value ${link.status === 'accessible' ? 'bg-green' : 'bg-red'}">${link.status === 'accessible' ? '异常' : '正常'}</span>
                     </a>
                 `;
                 container.appendChild(badge);
